@@ -24,14 +24,11 @@
 """
 
 import os
-#import sqlalchemy
-#from databases import Database
 import motor.motor_asyncio
 from bson import ObjectId
 
 
-#DATABASE_URI = os.getenv('DATABASE_URI')
-DATABASE_URI = "mongodb://zuser:fPfbYBDSNlZcAAPM@localhost/?authSource=ziem&authMechanism=SCRAM-SHA-256"
+DATABASE_URI = os.getenv('DATABASE_URI')
 client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URI)
 db = client.ziem
 

@@ -29,10 +29,10 @@ from pydantic import BaseModel, Field
 from bson import ObjectId
 
 
-class PostModel(BaseModel):
+class SourceModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    title: str = Field(...)
-    body: str = Field(...)
+    name: str = Field(...)
+    desc: str = Field(...)
 
     class Config:
         allow_population_by_field_name = True
@@ -40,22 +40,22 @@ class PostModel(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "title": "JS post",
-                "body": "Post example",
+                "name": "Source name",
+                "body": "Source description",
             }
         }
 
 
-class UpdatePostModel(BaseModel):
-    title: str = Field(...)
-    body: str = Field(...)
+class UpdateSourceModel(BaseModel):
+    name: str = Field(...)
+    desc: str = Field(...)
 
     class Config:
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "title": "JS post",
-                "body": "Post example",
+                "name": "Source name",
+                "body": "Source description",
             }
         }
