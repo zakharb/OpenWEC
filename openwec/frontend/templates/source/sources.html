@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sources
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="row">
+
+  <div class="col-3 fs-4 m-4">
+    <strong>
+  
+      Sources
+
+      <span 
+        class="badge bg-warning text-dark"
+        id="table-count">
+        {{ data|length }}
+      </span>
+    </strong>
+  </div>
+
+  <div class="card border-1 shadow-sm">
+
+    <div class="row mx-4 mt-4" id="panel">
+
+      <div class="col-4">
+      </div>
+
+      <div class="col d-flex flex-row-reverse mb-5">
+        <a 
+          class="btn btn-lg btn-secondary shadow mx-1" 
+          data-toggle="tooltip" 
+          title=""
+          href="">
+          <i class="fa-solid fa-cloud"></i>
+        </a>
+        <a 
+          class="btn btn-lg btn-secondary shadow mx-1" 
+          data-toggle="tooltip" 
+          title=""
+          href="">
+          <i class="fas fa-file-archive"></i>
+        </a>
+        <a 
+          class="btn btn-lg btn-warning shadow mx-1" 
+          data-toggle="tooltip" 
+          title=""
+          data-url="{{ url_for('create_source') }}"
+          onclick="showAddModal(this)">
+          <i class="fas fa-plus"></i>
+        </a>
+        <input
+          class="form-control bg-secondary-subtle mx-3" 
+          type="text" 
+          placeholder="Search..." 
+          aria-label="default input example"
+          onkeyup="searchRow('searchInput')"
+          id="searchInput">
+      </div>                          
+    </div>
+
+    <div class="row mx-4 mt-4 d-none" id="second_panel">
+
+      <div class="col-2">
+        Selected:
+
+        <span 
+          class="badge bg-danger text-dark"
+          id="checked_count">
+          {{ data|length }}
+        </span>
+      </div>
+
+      <div class="col d-flex flex-row-reverse mb-5">
+        <a 
+          class="btn btn-lg btn-danger shadow mx-1" 
+          title="Delete"
+          onclick="deleteRow(this, 'table', 'searchInput')">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+        <a 
+          class="btn btn-lg btn-secondary shadow mx-1" 
+          title="Check"
+          onclick="">
+          <i class="fa-solid fa-list-check"></i>
+        </a>
+        <a 
+          class="btn btn-lg btn-secondary shadow mx-1" 
+          title=""
+          onclick="">
+          <i class="fas fa-file-import"></i>
+        </a>
+        <a 
+          class="btn btn-lg btn-warning shadow mx-1" 
+          title="Copy"
+          onclick="copyRow(this, 'table', 'searchInput')">
+          <i class="fas fa-copy"></i>
+        </a>
+      </div>          
+    </div>
+
+    <div class="card-body p-3">
+
+      <div class="table-responsive">
+      
+        <table class="table" id="table">
+      
+          <thead>
+            <tr>
+              <th>
+                  <input 
+                    class="form-check-input bg-secondary-subtle" 
+                    type="checkbox" 
+                    value="" 
+                    onclick="checkAllRow(this)"
+                    id="check_allrow">
+              </th>
+              <th data-name="name" onclick="">
+                Name
+              </th>
+              <th data-name="desc" onclick="">
+                Description
+              </th>
+              <th data-name="logs" onclick="">
+                Logs
+              </th>
+              <th name="pubdate" onclick="sortTableByColumn(this,'table',4)">
+                Date
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal mt-5" tabindex="-1" id="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <h5 class="modal-title">Edit source</h5>
+
+        <button 
+          type="button" 
+          class="btn-close" 
+          data-bs-dismiss="modal" 
+          aria-label="Close">
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <input 
+          type="hidden" 
+          id="_id" 
+          value="">
+
+        <div class="mb-3 row">
+
+          <label for="name" class="col-sm-3 col-form-label">Name</label>
+
+          <div class="col-sm-9">
+            <input 
+              type="text" 
+              class="form-control bg-secondary-subtle" 
+              id="name" 
+              value=""
+              placeholder="Source name">
+          </div>
+        </div>
+
+        <div class="mb-3 row">
+
+          <label for="desc" class="col-sm-3 col-form-label">Description</label>
+
+          <div class="col-sm-9">
+            <input 
+              type="text" 
+              class="form-control bg-secondary-subtle" 
+              id="desc" 
+              value="" 
+              placeholder="Description">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          data-bs-dismiss="modal">
+          Close
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn btn-warning btn-save" 
+          data-url="{{ url_for('update_source', _id=None) }}"
+          onclick="saveModal(this)">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+
+  window.onload = (event) => {
+    var tds = ["name", "desc", "logs", "pubdate"]
+    loadTable("table", "{{ url_for('front_list', path='/source/123') }}", tds, 'searchInput');
+  };
+  document.addEventListener('scroll', function () {
+      expandTable('table')
+  }, { passive: true });
+
+</script>
+
+
+{% endblock %}
