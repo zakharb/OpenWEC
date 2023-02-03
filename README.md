@@ -1,19 +1,19 @@
 <p align="center">
   <a href="https://www.linkedin.com/in/zakharb/openwec">
-  <img src="img/logo.png" alt="logo" />
+  <img src="img/logo.png" alt="Caution Font" />
 </p>
 
 <p align="center">
 
   <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&pause=1000&color=FB6222&width=435&lines=Open-source+Windows+Event+Collector" alt="Typing SVG" />
+    <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&pause=1000&color=C20F08&width=435&lines=Open-source+Windows+Event+Collector" alt="Typing SVG" />
   </a>  
 
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-0.1-blue" height="20"/>
-  <img src="https://img.shields.io/badge/python-3.11-blue" height="20"/>
+  <img src="https://img.shields.io/badge/version-0.1-red" height="20"/>
+  <img src="https://img.shields.io/badge/python-3.11-red" height="20"/>
 </p>
 
 
@@ -22,7 +22,7 @@
 </p>
 
 
-## Getting Started
+## :red_square: Getting Started
 
 [OpenWEC](https://github.com/zakharb/openwec) is open source analog for [Windows Event Collector](https://learn.microsoft.com/en-us/windows/win32/wec/windows-event-collector)   
 
@@ -55,28 +55,28 @@ docker-compose up -d
   <img src="img/install.gif" alt="animated" />
 </p>
 
-## Usage  
+## :red_square: Usage  
 
 
-## Configuration  
+## :red_square: Configuration  
 
 
 ### Examples  
 
-## Deployment
+## :red_square: Deployment
 
 Edit `Dockerfile` for each Microservice and deploy container
 
-## Versioning
+## :red_square: Versioning
 
 Using [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/zakharb/openwec/tags). 
 
-## Authors
+## :red_square: Authors
 
 * **Zakhar Bengart** - *Initial work* - [Ze](https://github.com/zakharb)
 
 See also the list of [contributors](https://github.com/zakharb/openwec/contributors) who participated in this project.
 
-## License
+## :red_square: License
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation - see the [LICENSE](LICENSE) file for details
