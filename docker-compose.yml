@@ -1,25 +1,40 @@
 version: '3.7'
 
 services:
-  mqtt_service:
-    build: ./openwec
-    environment:
-      - DATABASE_URI="mongodb://root:root@mongo:27017/mongo_db"
-      - MQTT_PSWD=mqtt_useR4
-      - MQTT_URL=7552e0d2600843c0a19294813d03310e.s1.eu.hivemq.cloud
-      - MQTT_PORT=8883
-      
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4 --reload
-    workdir: /app
-    volumes:
-      - ./openwec/:/app/
-
   mongo:
     image: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+
+  backend:
+    build: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend/:/app/
+    ports:
+      - 8001:8000
+    environment:
+      - DATABASE_URI="mongodb://root:root@mongo:27017/mongo_db"
+      - DB_USER=root
+      - DB_PSWD=root
+    depends_on:
+       - mongo
+
+  frontend:
+    build: ./frontend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./frontend/:/app/
+    ports:
+      - 8002:8000
+    environment:
+      - DATABASE_URI="mongodb://root:root@mongo:27017/mongo_db"
+      - DB_USER=root
+      - DB_PSWD=root
+    depends_on:
+       - backend
 
   nginx:
     image: nginx:latest
@@ -28,6 +43,4 @@ services:
     volumes:
       - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - openwec
-    logging:
-        driver: none 
+      - frontend

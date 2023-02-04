@@ -23,11 +23,7 @@
 
 
 ## :red_square: Getting Started
-
-[OpenWEC](https://github.com/zakharb/openwec) is open source analog for [Windows Event Collector](https://learn.microsoft.com/en-us/windows/win32/wec/windows-event-collector)   
-
-OpenWEC allows you to collect logs from Windows machines to Linux Server   
-using native [Windows Event Forwarding](https://social.technet.microsoft.com/wiki/contents/articles/33895.windows-event-forwarding-survival-guide.aspx)
+[OpenWEC](https://github.com/zakharb/openwec) allows you to collect logs from Windows machines to Linux Server using native [Windows Event Forwarding and Event Collector](https://learn.microsoft.com/en-us/windows/win32/wec/windows-event-collector).   This makes it easy to collect logs over HTTP, providing flexibility and higher performance than other alternatives.
 
 ### Requirements
 

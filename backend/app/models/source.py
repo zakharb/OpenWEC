@@ -22,12 +22,12 @@
         Pydantic models to make docs and check types
 """
 
-from pydantic import BaseModel
-from typing import Optional
-from .db import PyObjectId
-from pydantic import BaseModel, Field
 from bson import ObjectId
+from typing import Optional
+from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
+from app.db import PyObjectId
 
 class InSourceModel(BaseModel):
     name: str = Field(...)
@@ -40,7 +40,7 @@ class InSourceModel(BaseModel):
         schema_extra = {
             "example": {
                 "name": "Source name",
-                "body": "Source description",
+                "desc": "Source description",
             }
         }
 
@@ -59,6 +59,6 @@ class UpdateSourceModel(InSourceModel):
         schema_extra = {
             "example": {
                 "name": "Source name",
-                "body": "Source description",
+                "desc": "Source description",
             }
         }
