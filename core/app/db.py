@@ -30,7 +30,7 @@ from bson import ObjectId
 
 DATABASE_URI = os.getenv('DATABASE_URI')
 client = motor.motor_asyncio.AsyncIOMotorClient(DATABASE_URI)
-db = client.backend
+db = client.core
 
 class PyObjectId(ObjectId):
     @classmethod
