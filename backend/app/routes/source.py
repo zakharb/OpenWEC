@@ -26,6 +26,7 @@ from typing import List
 from fastapi import APIRouter, Body, HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+from bson import ObjectId
 
 from app.models.source import InSourceModel, OutSourceModel, UpdateSourceModel
 from app.db import db
@@ -43,32 +44,33 @@ async def source_list():
             response_description="Get a single source",
             response_model=OutSourceModel)
 async def source_get(id: str):
-    source = await db["sources"].find_one({"_id": Object(id)})
+    source = await db["sources"].find_one({"_id": ObjectId(id)})
     if not source:
         raise HTTPException(status_code=404, detail=f"Source {id} not found")
     return source
 
 @router.post("/", 
              response_description="Add new source", 
-             response_model=OutSourceModel)
+             response_model=OutSourceModel,
+             status_code=status.HTTP_201_CREATED)
 async def source_post(source: InSourceModel = Body(...)):
     created_source = jsonable_encoder(source)
-    new_source = await db["sources"].insert_one(source)
+    new_source = await db["sources"].insert_one(created_source)
     created_source = await db["sources"].find_one({"_id": new_source.inserted_id})
-    return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_source)
+    return created_source
 
 @router.put("/{id}", 
             response_description="Update a source", 
             response_model=UpdateSourceModel)
-async def update_source(id: str, source: UpdateSourceModel = Body(...)):
+async def source_put(id: str, source: UpdateSourceModel = Body(...)):
     source = {k: v for k, v in source.dict().items() if v is not None}
     if len(source) >= 1:
-        update_result = await db["sources"].update_one({"_id": Object(id)}, {"$set": source})
+        update_result = await db["sources"].update_one({"_id": ObjectId(id)}, {"$set": source})
         if update_result.modified_count == 1:
-            updated_source = await db["sources"].find_one({"_id": Object(id)})
+            updated_source = await db["sources"].find_one({"_id": ObjectId(id)})
             if updated_source:
                 return updated_source
-    existing_source = await db["sources"].find_one({"_id": Object(id)})
+    existing_source = await db["sources"].find_one({"_id": ObjectId(id)})
     if existing_source:
         return existing_source
     raise HTTPException(status_code=404, detail=f"Source {id} not found")
@@ -76,8 +78,20 @@ async def update_source(id: str, source: UpdateSourceModel = Body(...)):
 @router.delete("/{id}", 
                response_description="Delete a source",
                status_code=status.HTTP_204_NO_CONTENT)
-async def delete_source(id: str):
-    delete_result = await db["sources"].delete_one({"_id": Object(id)})
+async def source_delete(id: str):
+    delete_result = await db["sources"].delete_one({"_id": ObjectId(id)})
     if delete_result.deleted_count == 1:
-        return id
+        return None
     raise HTTPException(status_code=404, detail=f"Source {id} not found")
+
+@router.get("/{id}/copy", 
+             response_description="Copy a source", 
+             response_model=OutSourceModel,
+             status_code=status.HTTP_201_CREATED)
+async def source_copy(id: str):
+    source = await db["sources"].find_one({"_id": ObjectId(id)})
+    del source['_id']
+    #created_source = jsonable_encoder(source)
+    new_source = await db["sources"].insert_one(source)
+    created_source = await db["sources"].find_one({"_id": new_source.inserted_id})
+    return created_source

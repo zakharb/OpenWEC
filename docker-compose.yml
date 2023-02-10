@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   mongo:
@@ -7,32 +7,30 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-
+    logging:
+        driver: none
+      
   backend:
     build: ./backend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir app/
     volumes:
       - ./backend/:/app/
     ports:
       - 8001:8000
     environment:
-      - DATABASE_URI="mongodb://root:root@mongo:27017/mongo_db"
-      - DB_USER=root
-      - DB_PSWD=root
+      - DATABASE_URI=mongodb://root:root@mongo:27017/
     depends_on:
        - mongo
 
   frontend:
     build: ./frontend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload  --reload-dir app/
     volumes:
       - ./frontend/:/app/
     ports:
       - 8002:8000
     environment:
-      - DATABASE_URI="mongodb://root:root@mongo:27017/mongo_db"
-      - DB_USER=root
-      - DB_PSWD=root
+      - DATABASE_URI=mongodb://root:root@mongo:27017/
     depends_on:
        - backend
 
@@ -44,3 +42,5 @@ services:
       - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - frontend
+    logging:
+        driver: none

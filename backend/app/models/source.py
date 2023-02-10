@@ -45,11 +45,11 @@ class InSourceModel(BaseModel):
         }
 
 class OutSourceModel(InSourceModel):
-    _id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
 
 
 class UpdateSourceModel(InSourceModel):
-    _id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     name: str = Field(...)
     desc: str = Field(...)
 
