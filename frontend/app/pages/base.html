@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="{{ url_for('styles', path='/styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('styles', path='/bootstrap.min.css') }}"  rel="stylesheet">
+    <link href="{{ url_for('styles', path='/icons/css/all.min.css') }}" rel="stylesheet">
+    <title>OpenWEC</title>
+  	<link rel="icon" type="image/x-icon" href="{{ url_for('static', path='/favicon.ico') }}">
+    {% block head %}{% endblock %}
+
+</head>
+<body  data-bs-theme="dark">	
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary ">
+	<div class="container">
+	    <div class="container-fluid"><strong>
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+
+				    <a class="navbar-brand " href="#">
+				      <img 
+				      	src="{{ url_for('static', path='/logo.png') }}" 
+				      	alt="Bootstrap" 
+				      	width="160" 
+				      	height="40">
+				    </a>
+
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" 
+	          	 onclick="switchPage(this)"
+	          	 data-url="{{ url_for('get_source') }}">
+	          	Sources
+	          </a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link" 
+	          	 onclick="switchPage(this)"
+	          	 data-url="{{ url_for('get_source') }}">
+	          	Logins
+	          </a>
+	        </li>
+
+	        <li class="nav-item">
+	          <a class="nav-link">Logins</a>
+	        </li>
+
+	        <li class="nav-item dropdown">
+	          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+	            Options
+	          </a>
+	          <ul class="dropdown-menu">
+	            <li><a class="dropdown-item" href="#">Action</a></li>
+	            <li><a class="dropdown-item" href="#">Another action</a></li>
+	            <li><hr class="dropdown-divider"></li>
+	            <li><a class="dropdown-item" href="#">Something else here</a></li>
+	          </ul>
+	        </li>
+	      </ul></strong>
+	    </div>
+	</div>
+</nav>
+
+
+<div 
+	class="position-fixed top-2 end-0 p-2" 
+	style="z-index: 11">        
+  <div class="toast" id="toast">
+    <div class="toast-header">
+      <strong class="me-auto text-warning header">Info</strong>
+    </div>
+    <div class="toast-body">
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div id="page_data" class="col">
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script type="text/javascript"
+        src="{{url_for('js', path='/bootstrap.min.js')}}"></script>
+
+<script type="text/javascript"
+        src="{{url_for('js', path='/openwec.js')}}"></script>
+
+{% block javascript %}
+
+<script type="text/javascript">
+  function switchPage(e) {
+  	let content = document.querySelector('#page_data')
+  	let navlinks = document.querySelectorAll('.nav-link')
+  	Array.from(navlinks).forEach((navlink) => {
+  		navlink.classList.remove('active')
+  	})
+  	e.classList.add('active')
+  	fetch(e.dataset.url)
+  	.then((response) => response.text())
+  	.then((data) => content.innerHTML = data)
+  };
+</script>
+
+<script 
+  type="module" 
+  src="{{ url_for('components', path='/table.js') }}">
+</script>
+
+{% endblock %}
+
+</html>
+
