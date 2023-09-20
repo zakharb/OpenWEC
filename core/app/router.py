@@ -30,56 +30,39 @@ from bson import ObjectId
 
 from app.models.log import InLogModel, OutLogModel, UpdateLogModel
 from app.db import db
+from fastapi import Request
 
 router = APIRouter()
 
-@router.get("/", 
-            response_description="List all logs", 
-            response_model=List[OutLogModel])
-async def log_list():
-    logs = await db["logs"].find().to_list(1000)
-    return logs
+@router.post("/")
+#, 
+ # response_description="Add new log", 
+ # response_model=OutLogModel,
+ # status_code=status.HTTP_201_CREATED)
+async def log_post(request: Request):
+    #log: InLogModel = Body(...)):
+    #print(await request.json())
+    content_length = request.headers['Content-Length']
+    print('[*] Content length: ', content_length)
+    content_type = request.headers['Content-Type'].split(';')
+    print('[*] Content type: ', content_type)
+    if len(content_type) > 1:
+        charset = content_type[1].strip()[8:]
+        print('[*] Content charset: ', charset)
+    else:
+        charset = None
 
-@router.get("/{id}", 
-            response_description="Get a single log",
-            response_model=OutLogModel)
-async def log_get(id: str):
-    log = await db["logs"].find_one({"_id": ObjectId(id)})
-    if not log:
-        raise HTTPException(status_code=404, detail=f"Log {id} not found")
-    return log
+    body = await request.body()
+    if charset == 'UTF-16':
+        text = body.decode('utf16')
+    else:
+        text = body.decode('utf8')
+    print('[+] Content text:')
+    print(text)
+    #content_length = int(self.headers['Content-Length']) if 'Content-Length' in self.headers else 0
 
-@router.post("/", 
-             response_description="Add new log", 
-             response_model=OutLogModel,
-             status_code=status.HTTP_201_CREATED)
-async def log_post(log: InLogModel = Body(...)):
-    created_log = jsonable_encoder(log)
-    new_log = await db["logs"].insert_one(created_log)
-    created_log = await db["logs"].find_one({"_id": new_log.inserted_id})
-    return created_log
+    #created_log = jsonable_encoder(log)
+    #new_log = await db["logs"].insert_one(created_log)
+    #created_log = await db["logs"].find_one({"_id": new_log.inserted_id})
+    return
 
-@router.put("/{id}", 
-            response_description="Update a log", 
-            response_model=UpdateLogModel)
-async def log_put(id: str, log: UpdateLogModel = Body(...)):
-    log = {k: v for k, v in log.dict().items() if v is not None}
-    if len(log) >= 1:
-        update_result = await db["logs"].update_one({"_id": ObjectId(id)}, {"$set": log})
-        if update_result.modified_count == 1:
-            updated_log = await db["logs"].find_one({"_id": ObjectId(id)})
-            if updated_log:
-                return updated_log
-    existing_log = await db["logs"].find_one({"_id": ObjectId(id)})
-    if existing_log:
-        return existing_log
-    raise HTTPException(status_code=404, detail=f"Log {id} not found")
-
-@router.delete("/{id}", 
-               response_description="Delete a log",
-               status_code=status.HTTP_204_NO_CONTENT)
-async def log_delete(id: str):
-    delete_result = await db["logs"].delete_one({"_id": ObjectId(id)})
-    if delete_result.deleted_count == 1:
-        return None
-    raise HTTPException(status_code=404, detail=f"Log {id} not found")

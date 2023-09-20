@@ -61,13 +61,13 @@ export default class vModal extends HTMLElement {
               <div class="modal-footer">
                 <button 
                   type="button" 
-                  class="btn btn-secondary text-dark" 
+                  class="btn btn-secondary" 
                   data-bs-dismiss="modal">
                   Close
                 </button>
                 <button 
                   type="button" 
-                  class="btn btn-danger text-dark btn-save" 
+                  class="btn btn-danger btn-save" 
                   data-url=""
                   onclick="saveModal(this)">
                   Save
